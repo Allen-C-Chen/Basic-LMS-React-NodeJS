@@ -24,7 +24,7 @@ const AuthorsActions = {
     deleteAuthor: function(newAuthor){
         axios.delete('http://localhost:3000/author/' + newAuthor.author_id)
         .then(res => {
-            console.log(res);
+            //console.log(res);
             Dispatcher.dispatch({
                 actionType: 'DELETE_AUTHOR_SUCCESS',
                 data: newAuthor
@@ -38,9 +38,7 @@ const AuthorsActions = {
         });
     },
     updateAuthor: function(author){
-        const first_name = prompt("What is the new first name of the author", author.first_name);
-        const last_name = prompt("What is the new last name of the author", author.last_name);
-        if(first_name == "" || last_name == ""){
+        if(author.first_name == "" || author.last_name == ""){
             Dispatcher.dispatch({
                 actionType: "AUTHOR_PROMPT_INVALID_FAILURE",
                 data: "No null fields when updating, pelase try again"
@@ -49,15 +47,14 @@ const AuthorsActions = {
         else{
             const newAuthor = {
                 author_id: author.author_id,
-                first_name: first_name,
-                last_name: last_name
+                first_name: author.first_name,
+                last_name: author.last_name
             }
             axios.put("http://localhost:3000/author", newAuthor)
                 .then(res => {
-                    console.log(res);
                     Dispatcher.dispatch({
                         actionType: "UPDATE_AUTHOR_SUCCESS",
-                        data: newAuthor
+                        data: res.data
                     });
                 })
                 .catch( (err ) => {
@@ -69,17 +66,11 @@ const AuthorsActions = {
         }
 
     },
-    addAuthor: function () {
-      const firstName = prompt("What is the first name of the author");
-      const lastName = prompt("What is the last name of the author ");
-      const author = {
-            first_name: firstName,
-            last_name: lastName
-        }
-        if(firstName == "" || lastName == ""){
+    addAuthor: function (author) {
+        if(author.first_name  == "" || author.last_Name == ""){
             Dispatcher.dispatch({
                 actionType: "AUTHOR_PROMPT_INVALID_FAILURE",
-                data: "No null fields when adding, pelase try again"
+                data: "No null fields when adding, please try again"
             });
         }
         else{

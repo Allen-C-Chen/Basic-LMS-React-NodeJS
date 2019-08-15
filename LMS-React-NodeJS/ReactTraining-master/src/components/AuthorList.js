@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AuthorActions from '../actions/authorActions';
+import {Link} from 'react-router-dom';
 
 
 export class AuthorList extends React.Component{
@@ -21,11 +22,12 @@ export class AuthorList extends React.Component{
                     </button>
                 </td>
                 <td> 
-                    <button className = "AuthorList" onClick = {
-                        () => {
-                            this.update_author(author)
-                        }}>Update item
-                    </button>
+                <Link to = {{ 
+                    pathname: `/updateAuthor/${author.author_id}/${author.first_name}/${author.last_name}`
+                }
+                }>
+                <button className="AuthorList">Update</button>
+                </Link>
                 </td>
 
             </tr>
@@ -47,8 +49,8 @@ export class AuthorList extends React.Component{
         return(
             <div>
                 <h1>Authors</h1>
-                <button type="button" onClick={ this.add_Author }>Add Author</button>
-
+                <Link to="/addAuthor" replace>                <button className="AuthorList">Add Author</button>
+                </Link>
                 <table className="table">
                     <thead>
                         <tr>

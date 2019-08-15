@@ -1,6 +1,6 @@
 import Dispatcher from '../dispatcher/appDispatcher';
 import {EventEmitter} from 'events';
-import {ErrorBoundary} from '../components/ErrorBoundary.js';
+//import {ErrorBoundary} from '../components/ErrorBoundary.js';
 
 const CHANGE_EVENT = 'change';
 let _bookStore = {
@@ -50,7 +50,6 @@ Dispatcher.register( (action) => {
     switch (action.actionType){
         //Read all books
         case 'READ_BOOK_FAILURE':
-            //alert("There is no data to access");
             alert(action.data);
             break;
         case 'READ_BOOK_SUCCESS':
@@ -63,7 +62,7 @@ Dispatcher.register( (action) => {
             BookStore.emitChange();
             break;
         case 'DELETE_BOOK_FAILURE':
-            alert(action.data); //never put view logic in switch
+            alert(action.data); 
             break;
         case 'BOOK_PROMPT_INVALID_FAILURE':
             alert(action.data);
@@ -76,10 +75,10 @@ Dispatcher.register( (action) => {
         case 'UPDATE_BOOK_FAILURE':
 
             alert(action.data);
-            ErrorBoundary.errorHasHappened();
+            //ErrorBoundary.errorHasHappened();
             //throw new Error(action.data)
             //BookStore.updateBook("Error");
-            //BookStore.emitChangeError(); 
+            BookStore.emitChangeError(); 
 
             //return "error"
             //this.throw(action.data);
@@ -89,12 +88,9 @@ Dispatcher.register( (action) => {
             BookStore.emitChange(); 
             break;
         case 'ADD_BOOK_FAILURE':
-            throw new Error(action.data)
-            //alert(action.data);
-            //console.log("THERE IS AN ERROR");
-            //throw "(action.data)";
-            //return "error";
-            //break;         
+            //throw new Error(action.data)
+            alert(action.data);
+            break;         
         default:
             return;
     }

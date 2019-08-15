@@ -9,9 +9,11 @@ export class ErrorBoundary extends React.Component {
    static getDerivedStateFromError(error) {
      // Update state so the next render will show the fallback UI.
      console.log("ERROR GET DRIVED")
+     this.setState({ hasError: true });
+      console.log(hasError);
      return { hasError: true };
    }
-   errorHasHappened(){
+   static errorHasHappened(){
       this.setState({ hasError: true });
 
    }

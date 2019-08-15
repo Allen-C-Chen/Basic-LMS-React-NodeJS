@@ -10,8 +10,6 @@ import {ErrorBoundary} from './ErrorBoundary.js';
 export class BookList extends React.Component{
 
     createBookRow(book){
-        console.log("BOOK LIST");
-        console.log(this.props);
 
         return (
             <tr key={book.book_id}>
@@ -44,19 +42,8 @@ export class BookList extends React.Component{
         //this.props.book = book;
         BookActions.load_update_book(book)
     }
-    update_book(book){
-        <Link to = {{ 
-            pathname: `/updateBook/${book.book_id}/${book.title}/${book.author}`
-        }
-        }>
-            Update
-        </Link>
-        //BookActions.updateBook(book);
-    }
-    add_Book(){
-        //window.open("http://localhost:3000/book");
-        BookActions.addBook();
-    }
+
+
     UNSAFE_componentWillMount(){
         BookActions.readBooks();
     }
@@ -66,8 +53,8 @@ export class BookList extends React.Component{
 
             <div>
                 <h1>Books</h1>
-                <button type="button" onClick={ this.add_Book }>Add Book</button>
-                <Link to="/addBook" replace>Add Book</Link>
+                <Link to="/addBook" replace>                <button className="BookList">Add Book</button>
+                </Link>
 
                 <table className="table">
                     <thead>
@@ -80,14 +67,12 @@ export class BookList extends React.Component{
                         </tr>
                     </thead>
                     <tbody>
-
                         {this.props.bookList.map(this.createBookRow, this)}
 
                     </tbody>    
                 </table>
             </div>
             </ErrorBoundary>    
-
         );
     }
 }

@@ -5,7 +5,11 @@ import {EventEmitter} from 'events';
 const CHANGE_EVENT = 'change';
 
 let _authorStore = {
-  authors: []
+  authors: [],
+  author: {
+    first_name: "",
+    last_name: ""
+  }   
 };
 
 class AuthorStoreClass extends EventEmitter{

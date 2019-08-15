@@ -11,14 +11,10 @@ export class UpdateBookForm extends React.Component{
       super(props);
       var pathVar = this.props.location.pathname;
       var pathArray = pathVar.split("/");
-      console.log(pathArray);
       this.state = {title: pathArray[3],
                   author: pathArray[4],
                   book_id: pathArray[2],
                   error: null, errorInfo: null };
-      console.log("TITLE " + this.state.title);
-      console.log("AUTHOR " + this.state.author);
-      console.log("ID " + this.state.book_id);
 
       this.handleChange = this.handleChange.bind(this);
 
@@ -29,7 +25,6 @@ export class UpdateBookForm extends React.Component{
       this.setState({ [evt.target.name]: evt.target.value });
     }
     handleSubmit(event) {
-      alert('A name was submitted: ' + this.state.title + "  " + this.state.author);
       event.preventDefault();
       const book = {
           title: this.state.title,
@@ -37,19 +32,13 @@ export class UpdateBookForm extends React.Component{
           book_id: this.state.book_id
       }    
 
-      try {
-      
-        BookActions.updateBook(book);
+      BookActions.updateBook(book);
 
-      } catch (error) {
-        console.log("HIasdfasdf");
-      }
     }
     
     render() {
       return (
         <ErrorBoundary>
-
         <form onSubmit={this.handleSubmit}>
           <label>
             What is the new Title:
@@ -61,34 +50,18 @@ export class UpdateBookForm extends React.Component{
           </label>
 
           <input type="submit" value="Submit" />
-
         </form>
-
         </ErrorBoundary>    
-
       );
-
     }
-
 }
 UpdateBookForm.propTypes = {
   book: PropTypes.string.isRequired,
   location: PropTypes.string,
 };
 
-  export class Errors extends React.Component{
-      render(){
-
-    return <h1>Something went wrong.</h1>;
-
-  }}
-
-
 export class AddBookForm extends React.Component{
-      add_Book(book){
-      //window.open("http://localhost:3000/book");
-      //throw "Something went wrong";
-        console.log("SHOULD BE HERE 1");
+  add_Book(book){
         BookActions.addBook(book);
   }
    constructor(props) {
@@ -104,29 +77,13 @@ export class AddBookForm extends React.Component{
     handleChange (evt) {
       this.setState({ [evt.target.name ]: evt.target.value });
     }
-
-    
-   //  handleChange(event) {
-   //    this.setState({value: event.target.value});
-   //  }
-   //  handleChangeAuthor(event) {
-   //    this.setState({value: event.target.author});
-   //  }  
     handleSubmit(event) {
-      // alert('A name was submitted: ' + this.state.title + "  " + this.state.author);
       event.preventDefault();
       const book = {
          title: this.state.title,
          author: this.state.author
       }
       this.add_Book(book);
-      // try{
-      //   this.add_Book(book);      
-      // }
-      // catch(e){
-      //   this.setState.errorInfo = true;
-      //   console.log("there is an error");
-      // }
     }
   
     render() {
@@ -149,8 +106,6 @@ export class AddBookForm extends React.Component{
           </form>
         );
       }
-      }
-
-      
+    }
 }
 
