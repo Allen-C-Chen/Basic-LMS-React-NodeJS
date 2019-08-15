@@ -2,46 +2,88 @@
 import React from 'react';
 import BookActions from '../actions/bookActions';
 import PropTypes from 'prop-types';
+import {ErrorBoundary} from './ErrorBoundary.js';
+
 
 
 export class UpdateBookForm extends React.Component{
    constructor(props) {
-
       super(props);
-      this.state = {
-        title: "TEMP"
-        // author: this.props.book.author
+      var pathVar = this.props.location.pathname;
+      var pathArray = pathVar.split("/");
+      console.log(pathArray);
+      this.state = {title: pathArray[3],
+                  author: pathArray[4],
+                  book_id: pathArray[2],
+                  error: null, errorInfo: null };
+      console.log("TITLE " + this.state.title);
+      console.log("AUTHOR " + this.state.author);
+      console.log("ID " + this.state.book_id);
+
+      this.handleChange = this.handleChange.bind(this);
+
+      this.handleSubmit = this.handleSubmit.bind(this);
+
+    }
+    handleChange (evt) {
+      this.setState({ [evt.target.name]: evt.target.value });
+    }
+    handleSubmit(event) {
+      alert('A name was submitted: ' + this.state.title + "  " + this.state.author);
+      event.preventDefault();
+      const book = {
+          title: this.state.title,
+          author: this.state.author,
+          book_id: this.state.book_id
+      }    
+
+      try {
+      
+        BookActions.updateBook(book);
+
+      } catch (error) {
+        console.log("HIasdfasdf");
       }
-      console.log("What is in prompt");
-      console.log(this.props);
-      console.log("TEST");
-      console.log(this.props.books); 
-
-      // console.log(this.props.location.state.str);       
-
     }
-    componentDidMount(){
-      // const{handle} = this.props.match.params
-      // const{book} =   this.props.location.state
-      // console.log(handle);
-      // console.log(book);
-    }
-   render(){
-    //const { title, author } = this.props;
-
+    
+    render() {
       return (
-         <div>
-            <h1> Test</h1>
-         <h1> Testdone </h1>
+        <ErrorBoundary>
 
-           <input type="text" value = {this.state.title} />
-         </div>
-       );
-   }
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            What is the new Title:
+            <input type="text" name = "title" value = {this.state.title} onChange={this.handleChange} />
+          </label>
+          <label>
+            What is the new Author:
+            <input type="text" name = "author" value = {this.state.author} onChange={this.handleChange} />
+          </label>
+
+          <input type="submit" value="Submit" />
+
+        </form>
+
+        </ErrorBoundary>    
+
+      );
+
+    }
+
 }
 UpdateBookForm.propTypes = {
-  books: PropTypes.string.isRequired
+  book: PropTypes.string.isRequired,
+  location: PropTypes.string,
 };
+
+  export class Errors extends React.Component{
+      render(){
+
+    return <h1>Something went wrong.</h1>;
+
+  }}
+
+
 export class AddBookForm extends React.Component{
       add_Book(book){
       //window.open("http://localhost:3000/book");
@@ -55,14 +97,12 @@ export class AddBookForm extends React.Component{
                   author: '',
                   error: null, errorInfo: null };
 
-      // this.handleChange = this.handleChange.bind(this);
-      // this.handleChangeAuthor = this.handleChangeAuthor.bind(this);
       this.handleChange = this.handleChange.bind(this);
 
       this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleChange (evt) {
-      this.setState({ [evt.target.name]: evt.target.value });
+      this.setState({ [evt.target.name ]: evt.target.value });
     }
 
     
@@ -73,7 +113,7 @@ export class AddBookForm extends React.Component{
    //    this.setState({value: event.target.author});
    //  }  
     handleSubmit(event) {
-      alert('A name was submitted: ' + this.state.title + "  " + this.state.author);
+      // alert('A name was submitted: ' + this.state.title + "  " + this.state.author);
       event.preventDefault();
       const book = {
          title: this.state.title,

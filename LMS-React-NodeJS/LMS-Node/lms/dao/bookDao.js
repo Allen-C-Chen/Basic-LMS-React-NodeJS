@@ -16,10 +16,7 @@ exports.addBook = function(book, cb){
             });
           }
           else{
-            console.log(result);
             db.commit(function(err, res){
-              console.log(res);
-
               cb(err, res, result);
             });
   
@@ -38,7 +35,6 @@ exports.updateBook = function(book,cb){ //update fails if it is not changing any
 
     if(err) cb(err,null);
     db.query('update lms3.book set title = ?, author = ? where book_id = ?', [book.title, book.author, book.book_id], function(err,res){
-      console.log(book);
       if(err || res.affectedRows == 0 ){
         db.rollback(function(err, res){ //sequalizer
           cb("erorr", res); //need to look it

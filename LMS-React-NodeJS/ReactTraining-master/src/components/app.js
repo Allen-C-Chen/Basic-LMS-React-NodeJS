@@ -14,7 +14,6 @@ import AuthorStore from '../stores/authorStore';
 import {AddBookForm}  from "./addBook";
 import {UpdateBookForm}  from "./addBook";
 
-//import NameForm from "./addBook";
 
 export class App extends React.Component{
 
@@ -23,28 +22,29 @@ export class App extends React.Component{
         this.state = {
             bookList:[],
             authorList:[],
-            book: {
-                title: "",
-                author: ""
-            }
+            hasError: false
         };
     }
 
     render() {
         console.log("IN APP");
-        console.log(this.props);
+        console.log(this.state);
+    
         return(
             <div>
                 <Header />
                 <Switch>
                     <Route exact path='/' component={Home}/>
-                    <Route path='/books' render={(props) => (<Books {...props} bookList={this.state.bookList} />)}/>
+                    <Route path='/books' render={(props) => (<Books {...props} bookList={this.state.bookList} hasError = {this.state.hasError}/>)}/>
+
+
                     <Route path='/authors' render={ (props) => (<Authors {...props} authorList={this.state.authorList} />)}/>
                     <Route path='/addBook' render={ (props) => (<AddBookForm {...props} />)}/>
 
-                    <Route path='/updateBook' render={ (props) => (<UpdateBookForm {...props} book ={this.state.book} />)}/>
-                    
-                    {/* <Route path='/updateBook' render={ (props) => (<UpdateBookForm {...props} />)}/> */}
+                    {/* <Route path='/updateBook' render={ (props) => (<UpdateBookForm {...props} book ={this.state.book} />)}/> */}
+
+                    <Route path='/updateBook/:bookid' render={ (props) => (<UpdateBookForm {...props} book = "hi bob"/>)}/>
+
                     {/* <Route exact path="/addBook" component={AddBookForm} /> */}
 
                 </Switch>
@@ -55,7 +55,6 @@ export class App extends React.Component{
     UNSAFE_componentWillMount(){
         BookStore.addChangeListener(this._onBookChange.bind(this));
         AuthorStore.addChangeListener(this._onAuthorChange.bind(this));
-
     }
 
     UNSAFE_componentWillUnmount(){
@@ -63,7 +62,7 @@ export class App extends React.Component{
         AuthorStore.removeChangeListener(this._onAuthorChange.bing(this));
 
     }
-
+    
     _onBookChange(){
         this.setState({bookList: BookStore.getAllBooks()});
     }

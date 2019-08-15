@@ -6,10 +6,13 @@ import BookActions from '../actions/bookActions';
 import {Link} from 'react-router-dom';
 
 //import {Authors} from "./addBook.js";
-
+import {ErrorBoundary} from './ErrorBoundary.js';
 export class BookList extends React.Component{
 
     createBookRow(book){
+        console.log("BOOK LIST");
+        console.log(this.props);
+
         return (
             <tr key={book.book_id}>
                 <td> {book.book_id} </td>
@@ -23,33 +26,13 @@ export class BookList extends React.Component{
                     </button>
                 </td>
                 <td> 
-                {/* <Link to = {{
-                    pathname: "/updateBook",
-                    title: "ALLEN IS HERE",
-                    state: {
-                        firstName: "HI TEHREREWREREWREW",
-                        //title: "Allen"
-                    } 
+                <Link to = {{ 
+                    pathname: `/updateBook/${book.book_id}/${book.title}/${book.author}`
                 }
                 }>
-                    Update
-                </Link> */}
-
-                {/* <Link to="/updateBook" replace>Update</Link> */}
-                {/* <Link to="/updateBook/3"  params={{ testvalue: "helloTHEREREHRE" }}>Update</Link> */}
-                    {/* <button className = "BookList" onClick = {
-                        () => {
-                            this.update_book(book)
-                        }}>Update item
-                    </button> */}
-                
-                    <button className = "BookList" onClick = {
-                        () => {
-                            this.load_update_book(book)
-                        }}>Update item
-                    </button>
+                <button className="BookList">Update</button>
+                </Link>
                 </td>
-
             </tr>
         );
     }
@@ -57,11 +40,18 @@ export class BookList extends React.Component{
         BookActions.deleteBook(book);
     }
     load_update_book(book){
-        console.log("Loading...1")
+
+        //this.props.book = book;
         BookActions.load_update_book(book)
     }
     update_book(book){
-        BookActions.updateBook(book);
+        <Link to = {{ 
+            pathname: `/updateBook/${book.book_id}/${book.title}/${book.author}`
+        }
+        }>
+            Update
+        </Link>
+        //BookActions.updateBook(book);
     }
     add_Book(){
         //window.open("http://localhost:3000/book");
@@ -72,6 +62,8 @@ export class BookList extends React.Component{
     }
     render() {
         return(
+            <ErrorBoundary>
+
             <div>
                 <h1>Books</h1>
                 <button type="button" onClick={ this.add_Book }>Add Book</button>
@@ -88,10 +80,14 @@ export class BookList extends React.Component{
                         </tr>
                     </thead>
                     <tbody>
+
                         {this.props.bookList.map(this.createBookRow, this)}
+
                     </tbody>    
                 </table>
             </div>
+            </ErrorBoundary>    
+
         );
     }
 }

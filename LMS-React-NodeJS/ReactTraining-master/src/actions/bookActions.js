@@ -21,6 +21,15 @@ const BooksActions = {
             });
         });
     },
+    getOneBook(book_id){
+        axios.get('http://localhost:3000/book/' + book_id)
+        .then(res => {
+            Dispatcher.dispatch({
+                actionType: 'GET_BOOK_SUCCESS',
+                data: res.data
+            })
+        })
+    },
     deleteBook: function(newBook){
         axios.delete('http://localhost:3000/book/' + newBook.book_id)
         .then(res => {
@@ -38,17 +47,16 @@ const BooksActions = {
         });
     },
     load_update_book(book){
-        console.log("loading... 2");
         Dispatcher.dispatch({
             actionType: 'LOAD_UPDATE_PAGE',
             data: book
         });
     },
     updateBook: function(book){
-        const name = prompt("What is the new title of the book", book.title);
-        const author = prompt("What is the new author name", book.author);
+        // const name = prompt("What is the new title of the book", book.title);
+        // const author = prompt("What is the new author name", book.author);
         console.log(name);
-        if(name === "" || author == ""){
+        if(book.title === "" || book.author == ""){
             Dispatcher.dispatch({
                 actionType: "BOOK_PROMPT_INVALID_FAILURE",
                 data: "No null fields when updating, pelase try again"
@@ -57,8 +65,8 @@ const BooksActions = {
         else{
             const newBook = {
                 book_id: book.book_id,
-                title: name,
-                author: author
+                title: book.title,
+                author: book.author
             }
             axios.put("http://localhost:3000/book", newBook)
                 .then(res => {

@@ -1,6 +1,6 @@
 import Dispatcher from '../dispatcher/appDispatcher';
 import {EventEmitter} from 'events';
-
+import {ErrorBoundary} from '../components/ErrorBoundary.js';
 
 const CHANGE_EVENT = 'change';
 let _bookStore = {
@@ -12,7 +12,9 @@ let _bookStore = {
 };
 
 class BookStoreClass extends EventEmitter{
-
+    getBook(){
+        return _bookStore.book;
+    }
     addChangeListener(cb){
         this.on(CHANGE_EVENT, cb);
     }
@@ -24,20 +26,15 @@ class BookStoreClass extends EventEmitter{
     emitChange(){
         this.emit(CHANGE_EVENT);
     }
-
+    emitChangeError(){
+        this.emit("CHANGE_EVENT");
+    }
     getAllBooks(){
         return _bookStore.books;
     }
     deleteBook(book){
         const newBooks = _bookStore.books.filter(elem => {return elem.book_id != book.book_id});
         _bookStore.books = newBooks;
-    }
-    loadUpdateBook(book){
-        _bookStore.book = book;
-        //<Link to="/updateBook" replace>Update</Link>
-        window.open("http://localhost:9090/#/updateBook")
-        //win.focus();
-        return book;
     }
     updateBook(book){
         const index = _bookStore.books.findIndex((elem) => { return elem.book_id == book.book_id});
@@ -71,29 +68,33 @@ Dispatcher.register( (action) => {
         case 'BOOK_PROMPT_INVALID_FAILURE':
             alert(action.data);
             break;
-        //Update Book
-        case 'LOAD_UPDATE_PAGE':
-            //BookStore.updateBook(action.data);
-            BookStore.loadUpdateBook(action.data);
-            //BookStore.emitChange(); 
-            break;
+        //Update Book   
         case 'UPDATE_BOOK_SUCCESS':
             BookStore.updateBook(action.data);
             BookStore.emitChange(); 
             break;
         case 'UPDATE_BOOK_FAILURE':
+
             alert(action.data);
+            ErrorBoundary.errorHasHappened();
+            //throw new Error(action.data)
+            //BookStore.updateBook("Error");
+            //BookStore.emitChangeError(); 
+
+            //return "error"
+            //this.throw(action.data);
             break;          
         case 'ADD_BOOK_SUCCESS':
             _bookStore.books.push(action.data);
             BookStore.emitChange(); 
             break;
         case 'ADD_BOOK_FAILURE':
-            alert(action.data);
+            throw new Error(action.data)
+            //alert(action.data);
             //console.log("THERE IS AN ERROR");
             //throw "(action.data)";
             //return "error";
-            break;         
+            //break;         
         default:
             return;
     }
